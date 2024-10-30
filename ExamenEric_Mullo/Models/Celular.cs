@@ -9,6 +9,7 @@ namespace ExamenEric_Mullo.Models
         [StringLength(20)]
         public string Modelo { get; set; }
         [Range(2000, 2024)]
-        public anio
+        public int anio { get; set; }
+        public float precio { get; set; }
     }
 }
