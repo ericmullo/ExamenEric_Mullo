@@ -2,10 +2,23 @@
     ViewData["Title"] = "Home Page";
 }
 
-<!-- Estilo en línea para fondo rojo claro -->
+
 <style>
     body {
-        background-color: #ffe6e6; /* Un tono de rojo claro */
+        background-color: #ffe6e6; 
+    }
+
+    
+    #imagenAbajo {
+        width: 300px; 
+        height: 300px; 
+        background-image: url('/images/imagen.jpg'); 
+        background-size: cover; 
+        background-position: center; 
+        margin-top: 20px; 
+        margin-left: auto;
+        margin-right: auto;
+        display: block; 
     }
 </style>
 
@@ -13,14 +26,14 @@
     <h1 class="display-4"><em>Bienvenidos a mi Examen de programación :D</em></h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 
-    <!-- Imagen -->
-    <img src="~/images/messi.jpg" alt="Celebración de Messi" class="img-fluid mt-3" />
-
-    <!-- Botón que muestra el mensaje -->
+   
     <button onclick="mostrarMensaje()" class="btn btn-primary mt-3">Mostrar Mensaje</button>
 </div>
 
-<!-- JavaScript para mostrar el mensaje -->
+
+<div id="imagenAbajo"></div>
+
+
 <script>
     function mostrarMensaje() {
         alert("Hola soy Eric Mullo y mi Hobbie es jugar fútbol");
