@@ -19,14 +19,12 @@ namespace ExamenEric_Mullo.Controllers
             _context = context;
         }
 
-        // GET: EMulloes
         public async Task<IActionResult> Index()
         {
             var examenEric_MulloContext = _context.EMullo.Include(e => e.Celular);
             return View(await examenEric_MulloContext.ToListAsync());
         }
 
-        // GET: EMulloes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,31 +43,41 @@ namespace ExamenEric_Mullo.Controllers
             return View(eMullo);
         }
 
-        // GET: EMulloes/Create
         public IActionResult Create()
         {
             ViewData["IdCelular"] = new SelectList(_context.Celular, "Id", "Id");
             return View();
         }
 
-        // POST: EMulloes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Sueldo,Nombre,Correo,ClienteAntiguo,Pedido,IdCelular")] EMullo eMullo)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(eMullo);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Add(eMullo);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException dbEx)
+                {
+                    ModelState.AddModelError("", "Error en la base de datos: " + dbEx.Message);
+                    if (dbEx.InnerException != null)
+                    {
+                        ModelState.AddModelError("", "Detalle: " + dbEx.InnerException.Message);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Error inesperado: " + ex.Message);
+                }
             }
             ViewData["IdCelular"] = new SelectList(_context.Celular, "Id", "Id", eMullo.IdCelular);
             return View(eMullo);
         }
 
-        // GET: EMulloes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -82,13 +90,10 @@ namespace ExamenEric_Mullo.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdCelular"] = new SelectList(_context.Celular, "Id", "Id", eMullo.IdCelular);
+            ViewData["IdCelular"] = new SelectList(_context.Celular, "Id", "Nombre", eMullo.IdCelular);
             return View(eMullo);
         }
 
-        // POST: EMulloes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Sueldo,Nombre,Correo,ClienteAntiguo,Pedido,IdCelular")] EMullo eMullo)
@@ -118,11 +123,10 @@ namespace ExamenEric_Mullo.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCelular"] = new SelectList(_context.Celular, "Id", "Id", eMullo.IdCelular);
+            ViewData["IdCelular"] = new SelectList(_context.Celular, "Id", "Nombre", eMullo.IdCelular);
             return View(eMullo);
         }
 
-        // GET: EMulloes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -141,7 +145,6 @@ namespace ExamenEric_Mullo.Controllers
             return View(eMullo);
         }
 
-        // POST: EMulloes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
